@@ -6,7 +6,7 @@
 /*   By: clorin <clorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/09 10:55:31 by clorin            #+#    #+#             */
-/*   Updated: 2021/02/09 16:50:44 by clorin           ###   ########.fr       */
+/*   Updated: 2021/02/09 17:16:50 by clorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ static	char		*save_static(char *str)
 
 int			get_next_line(char **line)
 {
-	char		buffer[2];
+	char		buffer[1024];
 	static char	*str_static = NULL;
 	int		result;
 	int		result_read;
@@ -145,7 +145,7 @@ int			get_next_line(char **line)
 	result_read = 1 ;
 	while (!nl_(str_static) || result_read != 0)
 	{
-		result_read = read(0, buffer, 1);
+		result_read = read(0, buffer, 1022);
 		if (result_read == -1)
 		{
 			line = NULL;
