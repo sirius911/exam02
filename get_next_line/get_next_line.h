@@ -6,7 +6,7 @@
 /*   By: clorin <clorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/09 15:27:16 by clorin            #+#    #+#             */
-/*   Updated: 2021/02/09 15:29:13 by clorin           ###   ########.fr       */
+/*   Updated: 2021/02/09 16:49:19 by clorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,6 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-int	get_next_line(int fd, char **line);
+int	get_next_line(char **line);
 
 #endif
