@@ -6,7 +6,7 @@
 /*   By: clorin <clorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/09 10:55:31 by clorin            #+#    #+#             */
-/*   Updated: 2021/02/09 17:16:50 by clorin           ###   ########.fr       */
+/*   Updated: 2021/02/11 13:58:36 by clorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ static char 		*ft_strjoin(char *s1, char *s2)
 		i++;
 		j++;
 	}
+	dest[i] = '\0';
 	free (s1);
 	return (dest);
 }
@@ -81,6 +82,7 @@ static	char		*recup_line(char *str)
 	{
 		dest = (char*)malloc(sizeof(char));
 		dest[0] = '\0';
+		return (dest);
 	}
 	while (str[i] && str[i] != '\n')
 		i++;
@@ -143,7 +145,7 @@ int			get_next_line(char **line)
 		return (-1);
 	}
 	result_read = 1 ;
-	while (!nl_(str_static) || result_read != 0)
+	while (!nl_(str_static) && result_read != 0)
 	{
 		result_read = read(0, buffer, 1022);
 		if (result_read == -1)
