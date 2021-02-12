@@ -5,16 +5,16 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: clorin <clorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/09 15:27:16 by clorin            #+#    #+#             */
-/*   Updated: 2021/02/09 16:49:19 by clorin           ###   ########.fr       */
+/*   Created: 2021/02/12 11:01:40 by clorin            #+#    #+#             */
+/*   Updated: 2021/02/12 11:50:28 by clorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
+
 #include <unistd.h>
 #include <stdlib.h>
-#include <fcntl.h>
 #include <stdio.h>
 
 int	get_next_line(char **line);
