@@ -6,7 +6,7 @@
 /*   By: clorin <clorin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 11:03:31 by clorin            #+#    #+#             */
-/*   Updated: 2021/02/12 12:30:07 by clorin           ###   ########.fr       */
+/*   Updated: 2021/02/16 08:46:43 by clorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ char		*ft_strjoin(char *s1, char *s2)
 }
 char		*recup_line(char *str)
 {
-	int	i;
+	int		i;
 	char	*dest;
 
 	i = 0;
@@ -77,13 +77,11 @@ char		*recup_line(char *str)
 		dest[0] = '\0';
 		return (dest);
 	}
-	while (str[i] != '\n' && str[i] != '\0')
+	while (str[i] && str[i] != '\n')
 		i++;
-	dest = (char*)malloc(sizeof(char) * i + 1);
+	dest = (char*)malloc(sizeof(char) * (i + 1));
 	if (!dest)
-	{
 		return (NULL);
-	}
 	i = 0;
 	while (str[i] && str[i] != '\n')
 	{
@@ -99,20 +97,13 @@ char		*save_static(char *str)
 	int	i;
 	int	j;
 	char	*dest;
-	int	len;
-
+	
 	i = 0;
 	if (!str)
 		return (NULL);
-	len = ft_strlen(str);
-	while(str[i] != '\n' && str[i] != '\0')
+	while (str[i] && str[i] != '\n')
 		i++;
-	if (str[i] == '\0')
-	{
-		free(str);
-		return (NULL);
-	}
-	dest = (char*)malloc(sizeof(char) * (len - i));
+	dest = (char*)malloc(sizeof(char) * (ft_strlen(str) - i));
 	if (!dest)
 	{
 		free(str);
@@ -120,14 +111,10 @@ char		*save_static(char *str)
 	}
 	i++;
 	j = 0;
-	while(i < len)
-	{
-		dest[j] = str[i];
-		i++;
-		j++;
-	}
+	while (str[i])
+		dest[j++] = str[i++];
 	dest[j] = '\0';
-	free(str);
+	free (str);
 	return (dest);
 }
 

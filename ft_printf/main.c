@@ -17,7 +17,6 @@ int
 
 	r = 0;
 	F("Simple test\n");
-	F("");
 	F("--Format---");
 	F("\n");
 	F("%d", 0);
