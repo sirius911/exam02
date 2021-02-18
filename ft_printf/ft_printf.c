@@ -122,8 +122,10 @@ int		format(t_conv c, va_list ap)
 	if (c.conv == 's')
 	{
 		s = va_arg(ap, char *);
-		if (!s)
+		if (!s && (c.prec == -1 || c.prec >= 6))
 			s = "(null)";
+		else if (!s)
+			s = "";
 		len = ft_strlen(s);
 		if (c.prec == -1)
 			c.prec = len;
@@ -184,11 +186,6 @@ int		ft_printf(const char *str, ...)
 		}
 		i++;
 	}
+	va_end(ap);
 	return (final_len);
-}
-
-int main()
-{
-	ft_printf("%10.1s\n", "coucou");
-	ft_printf("%10s\n", "coucou");
 }
