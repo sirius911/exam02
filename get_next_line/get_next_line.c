@@ -1,37 +1,24 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: clorin <clorin@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/12 11:03:31 by clorin            #+#    #+#             */
-/*   Updated: 2021/02/16 08:46:43 by clorin           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
+#include <stdio.h>
 
-static int	ft_strlen(char *str)
+static int		ft_strlen(char *str)
 {
-	int	i;
+	int		i = 0;
 
-	i = 0;
 	if (!str)
 		return (0);
-	while(str[i])
+	while (str[i])
 		i++;
 	return (i);
 }
 
-int		nl(char *str)
+static int		nl(char *str)
 {
-	int	i;
+	int		i = 0;
 
-	i = 0;
-	if(!str)
+	if (!str)
 		return (0);
-	while(str[i])
+	while (str[i])
 	{
 		if (str[i] == '\n')
 			return (1);
@@ -40,17 +27,16 @@ int		nl(char *str)
 	return (0);
 }
 
-char		*ft_strjoin(char *s1, char *s2)
+static char		*ft_strjoin(char *s1, char *s2)
 {
-	int	i;
-	int	j;
-	char	*dest;
+	int		i = 0;
+	int		j = 0;
+	char		*dest;
 
-	i = 0;
 	dest = (char*)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!dest)
 	{
-		free(s1);
+		free (s1);
 		return (NULL);
 	}
 	while (s1 && s1[i])
@@ -58,19 +44,18 @@ char		*ft_strjoin(char *s1, char *s2)
 		dest[i] = s1[i];
 		i++;
 	}
-	j = 0;
 	while (s2[j])
 		dest[i++] = s2[j++];
 	dest[i] = '\0';
-	free(s1);
+	free (s1);
 	return (dest);
 }
-char		*recup_line(char *str)
-{
-	int		i;
-	char	*dest;
 
-	i = 0;
+static char		*recup_line(char *str)
+{
+	int		i = 0;
+	char		*dest;
+
 	if (!str)
 	{
 		dest = (char*)malloc(sizeof(char));
@@ -92,47 +77,51 @@ char		*recup_line(char *str)
 	return (dest);
 }
 
-char		*save_static(char *str)
+static char		*save_static(char *str)
 {
-	int	i;
-	int	j;
-	char	*dest;
-	
-	i = 0;
-	if (!str)
+	int		i = 0;
+	int		j = 0;
+	char		*dest;
+	int		len = 0;
+
+	len = ft_strlen(str);
+	if(!str)
 		return (NULL);
 	while (str[i] && str[i] != '\n')
 		i++;
-	dest = (char*)malloc(sizeof(char) * (ft_strlen(str) - i));
+	if (str[i] == '\0')
+		return (NULL);
+	dest = (char*)malloc(sizeof(char) * (len - i));
 	if (!dest)
 	{
-		free(str);
+		free (str);
 		return (NULL);
 	}
 	i++;
-	j = 0;
-	while (str[i])
+	while(str[i])
 		dest[j++] = str[i++];
 	dest[j] = '\0';
 	free (str);
 	return (dest);
 }
 
-int	get_next_line(char **line)
+int			get_next_line(char **line)
 {
-	char		buffer[1024];
+	char		buffer[1028];
 	static char	*str_static = NULL;
-	int		r;
+	int		r = 1;
 	int		result;
 
-	r = 1;
 	if (!line)
 		return (-1);
-	while (!nl(str_static) && r != 0)
+	while(!nl(str_static) && r != 0)
 	{
 		r = read(0, buffer, 1022);
 		if (r == -1)
+		{
+			free(str_static);
 			return (-1);
+		}
 		buffer[r] = '\0';
 		str_static = ft_strjoin(str_static, buffer);
 	}
