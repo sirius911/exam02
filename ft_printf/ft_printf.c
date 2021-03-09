@@ -7,7 +7,6 @@ typedef struct s_flag
 	int			prec;
 	int			dot;
 	char		conv;
-	char		*base;
 }				t_flag;
 
 static int 		ft_strlen(char *str)
@@ -41,20 +40,17 @@ int 			min(int a, int b)
 	return ((a < b) ? a : b);
 }
 
-void 			itoa_base(long long nb, int len_base)
+void 			print_nbr(long long nb, char *base)
 {
-	char	*base;
+	int		len_base = 0;
 
-	if (len_base == 10)
-		base = "0123456789";
-	else
-		base = "0123456789abcdef";
+	len_base = ft_strlen(base);
 	if (nb < len_base)
 	{
 		write(1, &base[nb], 1);
 		return ;
 	}
-	itoa_base(nb / len_base, len_base);
+	print_nbr(nb / len_base, base);
 	write (1, &base[nb % len_base], 1);
 }
 
@@ -62,9 +58,9 @@ int 			ft_atoi(const char **str)
 {
 	int 		result = 0;
 
-	while (is_digit(*(*(str))))
+	while (is_digit(**str))
 	{
-		result = result * 10 + *(*str) - '0';
+		result = result * 10 + **str - '0';
 		(*str)++;
 	}
 	return (result);
@@ -72,11 +68,10 @@ int 			ft_atoi(const char **str)
 
 int 			get_len(long long nb, int len_base)
 {
-	int 	len;
+	int 	len = 0;
 
-	len = 0;
 	if (nb == 0)
-		len++;
+		return (1);
 	while (nb > 0)
 	{
 		nb = nb / len_base;
@@ -93,8 +88,9 @@ t_flag 			init_flag(const char *str, char c)
 	flag.dot = 0;
 	flag.conv = c;
 	flag.width = ft_atoi(&str);
-	if (*str++ == '.')
+	if (*str == '.')
 	{
+		str++;
 		flag.dot = 1;
 		flag.prec = ft_atoi(&str);
 	}
@@ -107,39 +103,35 @@ void			print_pad(char c, int len)
 		write (1, &c, 1);
 }
 
-void			ft_putstr(char *str, int len)
+void			print_str(char *str, int len)
 {
 	int 		i = 0;
 
 	while (str[i] && i < len)
-	{
 		write(1, &str[i++], 1);
-	}
 }
 
 int 			format(t_flag flag, va_list ap)
 {
 	char		*str;
+	long long	nb;
+	int			neg = 0;
 	int 		len = 0;
 
 	if (flag.conv == 's')
 	{
 		str = va_arg(ap, char*);
-		if(!str && (flag.prec == -1 || flag.prec >= 6))
+		if (!str)
 			str = "(null)";
-		else if (!str)
-			str = "";
 		len = ft_strlen(str);
 		if (flag.prec == -1)
 			flag.prec = len;
 		len = min(flag.prec, len);
 		print_pad(' ', flag.width - len);
-		ft_putstr(str, len);
+		print_str(str, len);
 
 		return (max(flag.width, len));
 	}
-	long long	nb;
-	int 		neg = 0;
 	if (flag.conv == 'd')
 		nb = va_arg(ap, int);
 	if (flag.conv == 'x')
@@ -159,7 +151,7 @@ int 			format(t_flag flag, va_list ap)
 		write(1, "-", 1);
 	print_pad('0', flag.prec - len);
 	if (!(flag.prec == 0 && nb == 0))
-		itoa_base(nb, (flag.conv == 'd') ? 10 : 16);
+		print_nbr(nb, (flag.conv == 'd') ? "0123456789" : "0123456789abcdef");
 	len = max(flag.prec, len);
 	len = max(flag.width, len);
 	return (len);
@@ -168,26 +160,27 @@ int 			format(t_flag flag, va_list ap)
 int				ft_printf(const char *str, ...)
 {
 	va_list		ap;
-	int			i;
-	int			j;
-	int			written;
+	int			i = 0;
+	int			j = 0;
+	int			written = 0;
 
-	i = 0;
-	j = 0;
-	written = 0;
+	if (!str)
+		return (0);
 	va_start(ap, str);
 	while (str[i])
 	{
 		if (str[i] == '%')
 		{
 			j = i + 1;
-			while (!is_conv(str[i]))
+			while (str[i] && !is_conv(str[i]))
 				i++;
-			if (is_conv(str[i]))
+			if (!str[i])
 			{
-				written += format(init_flag(str + j, str[i]), ap);
+				va_end(ap);
+				return (written);
 			}
-
+			if (is_conv(str[i]))
+				written += format(init_flag(str + j, str[i]), ap);
 		}
 		else
 		{
